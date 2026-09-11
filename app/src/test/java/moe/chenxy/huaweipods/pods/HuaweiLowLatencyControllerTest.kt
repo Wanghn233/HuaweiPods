@@ -23,6 +23,7 @@ class HuaweiLowLatencyControllerTest {
         val verified = setOf(
             HuaweiDeviceRoute.HUAWEI_FREEBUDS5,
             HuaweiDeviceRoute.HUAWEI_FREEBUDS5I,
+            HuaweiDeviceRoute.HUAWEI_FREEBUDS_SE4_ANC,
             HuaweiDeviceRoute.HUAWEI_FREEBUDS6I,
             HuaweiDeviceRoute.HUAWEI_FREEBUDS_PRO3,
             HuaweiDeviceRoute.HUAWEI_FREEBUDS_PRO5,

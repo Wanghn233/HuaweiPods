@@ -86,6 +86,24 @@ class HuaweiAncPacketsTest {
     }
 
     @Test
+    fun `FreeBuds SE 4 ANC packets match verified capture`() {
+        val route = HuaweiDeviceRoute.HUAWEI_FREEBUDS_SE4_ANC
+        assertArrayEquals(
+            hex("5A0007002B0401020000D22D"),
+            HuaweiAncPackets.mode(route, NoiseControlMode.OFF),
+        )
+        assertArrayEquals(
+            hex("5A0007002B04010202FFAABF"),
+            HuaweiAncPackets.mode(route, NoiseControlMode.TRANSPARENCY),
+        )
+        assertArrayEquals(
+            hex("5A0007002B0401020102C15E"),
+            HuaweiAncPackets.mode(route, NoiseControlMode.NOISE_CANCELLATION, 0x02),
+        )
+        assertNull(HuaweiAncPackets.mode(route, NoiseControlMode.NOISE_CANCELLATION, 0x03))
+    }
+
+    @Test
     fun `FreeBuds Pro 3 uses captured ANC on and protocol family off packets`() {
         assertArrayEquals(
             hex("5A0007002B0401020000D22D"),
@@ -249,6 +267,7 @@ class HuaweiAncPacketsTest {
     fun `modern models with captured readback expose the ANC state query`() {
         val query = hex("5A0005002B2A0100427E")
 
+        assertArrayEquals(query, HuaweiAncPackets.currentStateQuery(HuaweiDeviceRoute.HUAWEI_FREEBUDS_SE4_ANC))
         assertArrayEquals(query, HuaweiAncPackets.currentStateQuery(HuaweiDeviceRoute.HUAWEI_FREEBUDS6I))
         assertArrayEquals(query, HuaweiAncPackets.currentStateQuery(HuaweiDeviceRoute.HUAWEI_FREEBUDS_PRO3))
         assertArrayEquals(query, HuaweiAncPackets.currentStateQuery(HuaweiDeviceRoute.HUAWEI_FREEBUDS_PRO5))

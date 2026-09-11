@@ -42,10 +42,18 @@ private val freeBuds4eAncOptions = listOf(
     HuaweiAncLevelOption(HuaweiAncLevel.BALANCED, protocolValue = 0x00, miuiValue = 0x00),
 )
 
+/** FreeBuds SE 4 ANC 000169/02 实机抓包确认：轻度=01、均衡=00、深度=02。 */
+private val freeBudsSe4AncOptions = listOf(
+    HuaweiAncLevelOption(HuaweiAncLevel.LIGHT, protocolValue = 0x01, miuiValue = 0x01),
+    HuaweiAncLevelOption(HuaweiAncLevel.BALANCED, protocolValue = 0x00, miuiValue = 0x00),
+    HuaweiAncLevelOption(HuaweiAncLevel.DEEP, protocolValue = 0x02, miuiValue = 0x02),
+)
+
 internal val HuaweiDeviceRoute.ancLevelOptions: List<HuaweiAncLevelOption>
     get() = when (this) {
         HuaweiDeviceRoute.HUAWEI_FREEBUDS5 -> freeBuds5AncOptions
         HuaweiDeviceRoute.HUAWEI_FREEBUDS4E -> freeBuds4eAncOptions
+        HuaweiDeviceRoute.HUAWEI_FREEBUDS_SE4_ANC -> freeBudsSe4AncOptions
         HuaweiDeviceRoute.HUAWEI_FREEBUDS5I,
         HuaweiDeviceRoute.HUAWEI_FREEBUDS6I,
         -> freeBuds6iAncOptions

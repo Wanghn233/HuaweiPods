@@ -17,6 +17,8 @@
     <string name="off">Off</string>
     <string name="low_latency_mode">Low latency mode</string>
     <string name="low_latency_auto_apply_summary">Automatically reapplied after every connection</string>
+    <string name="wind_noise_reduction">Wind noise reduction</string>
+    <string name="wind_noise_reduction_summary">Reduce wind interference in outdoor environments</string>
     <string name="milink_low_latency_card">Fusion Center low-latency card</string>
     <string name="milink_low_latency_card_summary">Use the Find Earbuds card to toggle low latency on supported models</string>
     <string name="low_latency_enabled">On</string>

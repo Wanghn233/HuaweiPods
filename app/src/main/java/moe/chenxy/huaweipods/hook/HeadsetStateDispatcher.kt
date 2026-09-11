@@ -33,6 +33,7 @@ import java.util.concurrent.atomic.AtomicReference
 
 object HeadsetStateDispatcher : HookContext() {
     private const val ROUTE_PROBE_WATCHDOG_MS = 5_500L
+    private const val HEADSET_ICON_WATCHDOG_MS = 2_500L
 
     private var appRequestReceiverRegistered = false
     private var appRequestReceiverContext: Context? = null
@@ -42,8 +43,23 @@ object HeadsetStateDispatcher : HookContext() {
     @Volatile
     private var acceptingCallbacks = false
     private val connectedA2dpAddresses = ConcurrentHashMap.newKeySet<String>()
+    private val connectedHuaweiA2dpAddresses = ConcurrentHashMap.newKeySet<String>()
     private val activeRouteProbe = AtomicReference<HuaweiDeviceRouteProbeSession?>(null)
     private val lastRouteProbeStartedAtMs = ConcurrentHashMap<String, Long>()
+    @Volatile
+    private var iconWatchdogContext: Context? = null
+    @Volatile
+    private var iconWatchdogRunning = false
+    private val iconWatchdogTick = object : Runnable {
+        override fun run() {
+            val context = iconWatchdogContext
+            if (!iconWatchdogRunning || context == null || connectedHuaweiA2dpAddresses.isEmpty()) return
+            setHeadsetIcon(context, visible = true, reason = "watchdog")
+            if (iconWatchdogRunning) {
+                mainHandler.postDelayed(this, HEADSET_ICON_WATCHDOG_MS)
+            }
+        }
+    }
 
     override fun onHook() {
         acceptingCallbacks = true
@@ -84,12 +100,17 @@ object HeadsetStateDispatcher : HookContext() {
                     registerAppRequestReceiver(context)
                     if (!isHuawei) return@runCatching
 
-                    val statusBarManager = context.getSystemService("statusbar") as StatusBarManager
                     if (currState == BluetoothHeadset.STATE_CONNECTED) {
-                        statusBarManager.setIconVisibility("wireless_headset", true)
+                        connectedHuaweiA2dpAddresses.add(normalizedAddress)
+                        setHeadsetIcon(context, visible = true, reason = "connected")
+                        startIconWatchdog(context)
                         HuaweiHfpController.connectPod(context, device)
                     } else if (currState == BluetoothHeadset.STATE_DISCONNECTING || currState == BluetoothHeadset.STATE_DISCONNECTED) {
-                        statusBarManager.setIconVisibility("wireless_headset", false)
+                        connectedHuaweiA2dpAddresses.remove(normalizedAddress)
+                        if (connectedHuaweiA2dpAddresses.isEmpty()) {
+                            stopIconWatchdog()
+                            setHeadsetIcon(context, visible = false, reason = "disconnected")
+                        }
                         HuaweiHfpController.disconnectedPod(context, device)
                     }
                 }.onFailure {
@@ -130,6 +151,11 @@ object HeadsetStateDispatcher : HookContext() {
                 ?.takeIf { isHuaweiPod(it) && isDeviceConnected(it) }
                 ?.also { connectedA2dpAddresses += address }
         }
+        connectedHuaweiA2dpAddresses.addAll(connectedDevices.map { it.address.uppercase() })
+        if (connectedHuaweiA2dpAddresses.isNotEmpty()) {
+            setHeadsetIcon(context, visible = true, reason = "hot-reload-restore")
+            startIconWatchdog(context)
+        }
         // Controller 只维护一个 HFP 会话。优先恢复旧代实际持有的设备，避免多设备
         // 遍历时后一个地址覆盖已恢复的电量并使通知恢复任务失效。
         val savedAddress = HuaweiHfpController.hotReloadSessionAddress(savedState)
@@ -144,6 +170,7 @@ object HeadsetStateDispatcher : HookContext() {
 
     override fun onClose() {
         acceptingCallbacks = false
+        stopIconWatchdog()
         pendingHostCallbacks.entries.toList().forEach { (task, handler) ->
             handler.removeCallbacks(task)
         }
@@ -163,6 +190,7 @@ object HeadsetStateDispatcher : HookContext() {
         appRequestReceiverContext = null
         appRequestReceiverRegistered = false
         connectedA2dpAddresses.clear()
+        connectedHuaweiA2dpAddresses.clear()
         activeRouteProbe.set(null)
         lastRouteProbeStartedAtMs.clear()
         HuaweiHfpController.closeForHotReload()
@@ -182,6 +210,34 @@ object HeadsetStateDispatcher : HookContext() {
         }
         pendingHostCallbacks[task] = handler
         if (!handler.post(task)) pendingHostCallbacks.remove(task)
+    }
+
+    private fun startIconWatchdog(context: Context) {
+        iconWatchdogContext = context
+        iconWatchdogRunning = true
+        mainHandler.removeCallbacks(iconWatchdogTick)
+        mainHandler.postDelayed(iconWatchdogTick, HEADSET_ICON_WATCHDOG_MS)
+    }
+
+    private fun stopIconWatchdog() {
+        iconWatchdogRunning = false
+        iconWatchdogContext = null
+        mainHandler.removeCallbacks(iconWatchdogTick)
+    }
+
+    private fun setHeadsetIcon(context: Context, visible: Boolean, reason: String) {
+        runCatching {
+            val statusBarManager = context.getSystemService("statusbar") as? StatusBarManager
+                ?: error("statusbar service unavailable")
+            statusBarManager.setIconVisibility("wireless_headset", visible)
+            Log.d("HuaweiPods", "status bar headset icon visible=$visible reason=$reason")
+        }.onFailure {
+            Log.w(
+                "HuaweiPods",
+                "status bar headset icon update failed visible=$visible reason=$reason",
+                it,
+            )
+        }
     }
 
     @SuppressLint("MissingPermission")

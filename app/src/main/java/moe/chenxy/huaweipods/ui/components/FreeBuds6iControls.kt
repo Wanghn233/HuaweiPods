@@ -28,31 +28,34 @@ private val freeBuds6iPresets = listOf(
     FreeBuds6iPreset(0x09, R.string.freebuds5_sound_effect_clear_voice),
 )
 
-/** FreeBuds 6i 官方音效与自定义均衡器，均使用真机状态中声明的预设 ID。 */
+/** FreeBuds 6i / SE 4 ANC 官方音效与自定义均衡器。 */
 @Composable
-fun FreeBuds6iControls(address: String) {
+fun FreeBuds6iControls(
+    address: String,
+    route: HuaweiDeviceRoute = HuaweiDeviceRoute.HUAWEI_FREEBUDS6I,
+) {
     val context = androidx.compose.ui.platform.LocalContext.current
-    var equalizerState by remember(address) { mutableStateOf<HuaweiEqualizerState?>(null) }
+    var equalizerState by remember(address, route) { mutableStateOf<HuaweiEqualizerState?>(null) }
 
     fun refreshState() {
         val device = context.freeBuds6iBluetoothDevice(address) ?: return
         HuaweiEqualizerController.requestState(
             context = context,
             device = device,
-            route = HuaweiDeviceRoute.HUAWEI_FREEBUDS6I,
+            route = route,
         ) { state ->
             if (state != null) equalizerState = state
         }
     }
 
-    DisposableEffect(address, context) {
+    DisposableEffect(address, route, context) {
         var disposed = false
         val device = context.freeBuds6iBluetoothDevice(address)
         if (device != null) {
             HuaweiEqualizerController.requestState(
                 context = context,
                 device = device,
-                route = HuaweiDeviceRoute.HUAWEI_FREEBUDS6I,
+                route = route,
             ) { state ->
                 if (!disposed && state != null) equalizerState = state
             }
@@ -81,7 +84,7 @@ fun FreeBuds6iControls(address: String) {
                     HuaweiEqualizerController.setBuiltInPreset(
                         context = context,
                         device = device,
-                        route = HuaweiDeviceRoute.HUAWEI_FREEBUDS6I,
+                        route = route,
                         presetId = preset.id,
                     ) { success ->
                         if (success) {
@@ -98,7 +101,7 @@ fun FreeBuds6iControls(address: String) {
         )
         HuaweiEqualizerPreference(
             address = address,
-            route = HuaweiDeviceRoute.HUAWEI_FREEBUDS6I,
+            route = route,
             readback = equalizerState,
             requestOnMount = false,
             onCustomApplied = { refreshState() },

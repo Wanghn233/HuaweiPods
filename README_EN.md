@@ -18,7 +18,7 @@
 
 HuaweiPods is an Xposed module for Xiaomi HyperOS. It integrates supported Huawei audio devices with the system headset popup, Super Island, Fusion Device Center, and Bluetooth detail page.
 
-The unified build supports the 15 models below in one APK. Model-specific test APKs are no longer distributed.
+The unified build supports the 16 models below in one APK. Model-specific test APKs are no longer distributed.
 
 ## Supported models
 
@@ -28,6 +28,7 @@ The unified build supports the 15 models below in one APK. Model-specific test A
 | HUAWEI FreeBuds 4E | Extended support | Battery, ANC/off with Light/Balanced levels and readback, left/right double-tap and press-and-hold, wear detection, fixed swipe-volume guidance, three official sound presets, and official color images |
 | HUAWEI FreeBuds 5 | Extended support | Battery, ANC/off readback, Smart/Light/Balanced ANC levels, wear detection, four official sound presets, high-quality audio and low-latency auto-apply; gesture settings remain pending |
 | HUAWEI FreeBuds 5i | Extended support | Battery, transparency/ANC/off readback, Smart/Light/Balanced/Deep ANC levels, left/right double-tap, wear detection, four official sound presets, high-quality audio, low-latency auto-apply, and official color images; long-press and swipe settings remain pending |
+| HUAWEI FreeBuds SE 4 ANC | Extended support | Battery, transparency/ANC/off readback, Light/Balanced/Deep ANC levels, wind-noise reduction, four official sound presets, a 10-band custom EQ, low-latency auto-apply, and official color images; gesture settings remain pending |
 | HUAWEI FreeBuds 6i | Extended support | Battery, transparency/ANC/off readback, four ANC levels, voice transparency, double/triple-tap gestures, four official sound presets, a 10-band custom EQ, low-latency auto-apply, Fusion Device Center synchronization, and dedicated images |
 | HUAWEI FreeBuds Pro 3 | Extended support | Battery, three-mode control and readback, four ANC levels, voice transparency, long-press/pinch/swipe gestures, and low-latency auto-apply |
 | HUAWEI FreeBuds Pro 4 | Basic support | Battery and ANC/off; no verified ANC state readback or gesture settings |

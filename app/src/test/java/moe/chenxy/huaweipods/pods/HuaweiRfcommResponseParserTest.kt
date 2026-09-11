@@ -395,6 +395,20 @@ class HuaweiRfcommResponseParserTest {
     }
 
     @Test
+    fun `parses FreeBuds SE 4 ANC battery response captured from official app`() {
+        val battery = HuaweiRfcommResponseParser.parseBattery(
+            hex("5A001B000108010164020364645403030000000402140A0502010106010A7404"),
+        )
+
+        assertEquals(100, battery?.left?.battery)
+        assertEquals(100, battery?.right?.battery)
+        assertEquals(84, battery?.case?.battery)
+        assertEquals(false, battery?.left?.isCharging)
+        assertEquals(false, battery?.right?.isCharging)
+        assertEquals(false, battery?.case?.isCharging)
+    }
+
+    @Test
     fun `parses Eyewear temple batteries without exposing the placeholder case`() {
         val response = hex("5A0014000108010144020346440003030000000402140A392E")
 

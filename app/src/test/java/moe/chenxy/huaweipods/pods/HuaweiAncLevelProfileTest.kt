@@ -79,6 +79,20 @@ class HuaweiAncLevelProfileTest {
     }
 
     @Test
+    fun `FreeBuds SE 4 ANC exposes captured light balanced and deep levels`() {
+        val route = HuaweiDeviceRoute.HUAWEI_FREEBUDS_SE4_ANC
+        val expected = listOf(
+            HuaweiAncLevelOption(HuaweiAncLevel.LIGHT, protocolValue = 0x01, miuiValue = 0x01),
+            HuaweiAncLevelOption(HuaweiAncLevel.BALANCED, protocolValue = 0x00, miuiValue = 0x00),
+            HuaweiAncLevelOption(HuaweiAncLevel.DEEP, protocolValue = 0x02, miuiValue = 0x02),
+        )
+
+        assertEquals(expected, route.ancLevelOptions)
+        assertEquals(0x01, route.defaultAncSubMode)
+        assertFalse(route.supportsAncSubMode(0x03))
+    }
+
+    @Test
     fun `FreeBuds 5i maps all four captured ANC levels`() {
         val route = HuaweiDeviceRoute.HUAWEI_FREEBUDS5I
         val expected = listOf(

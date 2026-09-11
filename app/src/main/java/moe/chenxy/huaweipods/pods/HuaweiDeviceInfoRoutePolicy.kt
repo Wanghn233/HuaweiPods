@@ -5,6 +5,7 @@ internal object HuaweiDeviceInfoRoutePolicy {
     private val routeByModelId = mapOf(
         "000141" to HuaweiDeviceRoute.HUAWEI_FREEBUDS5,
         "000145" to HuaweiDeviceRoute.HUAWEI_FREEBUDS5I,
+        "000169" to HuaweiDeviceRoute.HUAWEI_FREEBUDS_SE4_ANC,
         "000135" to HuaweiDeviceRoute.HUAWEI_FREEBUDS4E,
         "000153" to HuaweiDeviceRoute.HUAWEI_FREEBUDS6I,
         "000149" to HuaweiDeviceRoute.HUAWEI_FREEBUDS_PRO3,

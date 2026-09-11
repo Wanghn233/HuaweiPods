@@ -106,6 +106,17 @@ class HuaweiEqualizerCodecTest {
         assertNull(HuaweiEqualizerCodec.customWriteOperation(HuaweiDeviceRoute.HUAWEI_FREECLIP2))
     }
 
+    @Test
+    fun `FreeBuds SE 4 ANC exposes captured presets and custom operation`() {
+        val route = HuaweiDeviceRoute.HUAWEI_FREEBUDS_SE4_ANC
+        listOf(0x01, 0x02, 0x03, 0x09).forEach { presetId ->
+            assertTrue(presetId.toString(), HuaweiEqualizerCodec.buildBuiltInPresetPacket(route, presetId) != null)
+        }
+        assertNull(HuaweiEqualizerCodec.buildBuiltInPresetPacket(route, 0x04))
+        assertEquals(0x01, HuaweiEqualizerCodec.customWriteOperation(route))
+        assertTrue(HuaweiEqualizerCodec.supportsStateRead(route))
+    }
+
     private fun hex(value: String): ByteArray = value.chunked(2)
         .map { it.toInt(16).toByte() }
         .toByteArray()
