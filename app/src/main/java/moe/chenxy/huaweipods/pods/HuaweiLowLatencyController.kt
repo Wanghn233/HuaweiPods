@@ -27,6 +27,11 @@ object HuaweiLowLatencyController {
             onComplete?.invoke(false)
             return
         }
+        if (route == HuaweiDeviceRoute.NOTHING_EAR_OPEN) {
+            // Nothing Ear (open)：Nothing 私有 SPP 协议，SET_LAG_MODE 0xF040（payload 01/02）。
+            NothingBatteryController.setLowLatency(context, device, enabled, onComplete)
+            return
+        }
         HuaweiL2capAncController.sendRawPacketOnce(
             context = context,
             device = device,

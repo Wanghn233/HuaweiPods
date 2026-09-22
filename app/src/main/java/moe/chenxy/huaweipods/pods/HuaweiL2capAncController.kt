@@ -136,6 +136,11 @@ object HuaweiL2capAncController {
         onBattery: (BatteryParams) -> Unit,
         onComplete: ((Boolean) -> Unit)? = null,
     ) {
+        if (route == HuaweiDeviceRoute.NOTHING_EAR_OPEN) {
+            // Nothing Ear (open) 走 Nothing 私有 SPP 协议（AEAC4A03）
+            NothingBatteryController.requestBattery(context, device, onBattery, onComplete)
+            return
+        }
         val packet = HuaweiAncPackets.batteryQuery(route) ?: run {
             notifyComplete(onComplete, false)
             return
