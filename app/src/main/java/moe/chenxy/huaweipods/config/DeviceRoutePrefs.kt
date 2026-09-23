@@ -166,6 +166,7 @@ object DeviceRoutePrefs {
         HuaweiDeviceRoute.HUAWEI_FREEARC -> "freearc"
         HuaweiDeviceRoute.HUAWEI_EYEWEAR -> "eyewear"
         HuaweiDeviceRoute.HUAWEI_EYEWEAR2 -> "eyewear2"
+        HuaweiDeviceRoute.NOTHING_EAR_OPEN -> "nothing_ear_open"
         HuaweiDeviceRoute.UNSUPPORTED -> "unsupported"
     }
 
@@ -185,6 +186,7 @@ object DeviceRoutePrefs {
         "freearc" -> HuaweiDeviceRoute.HUAWEI_FREEARC
         "eyewear" -> HuaweiDeviceRoute.HUAWEI_EYEWEAR
         "eyewear2" -> HuaweiDeviceRoute.HUAWEI_EYEWEAR2
+        "nothing_ear_open" -> HuaweiDeviceRoute.NOTHING_EAR_OPEN
         else -> null
     }
 

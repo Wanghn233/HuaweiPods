@@ -55,6 +55,7 @@ import moe.chenxy.huaweipods.config.PodImageChangeNotifier
 import moe.chenxy.huaweipods.config.PodImageResource
 import moe.chenxy.huaweipods.pods.HuaweiDeviceRoute
 import moe.chenxy.huaweipods.pods.NoiseControlMode
+import moe.chenxy.huaweipods.pods.NothingOfficialImageCache
 import moe.chenxy.huaweipods.pods.UNKNOWN_HUAWEI_ANC_SUBMODE
 import moe.chenxy.huaweipods.pods.decodeHuaweiDeviceRouteFromBroadcast
 import moe.chenxy.huaweipods.pods.defaultAncSubMode
@@ -454,6 +455,9 @@ internal fun MainUI(
                             address = connectedDeviceAddress,
                             name = deviceName.orEmpty(),
                         )
+                        if (route == HuaweiDeviceRoute.NOTHING_EAR_OPEN) {
+                            NothingOfficialImageCache.ensureAsync(context, connectedDeviceAddress)
+                        }
                         hookConnected.value = true
                         hookConnectionState = "connected"
                         if (shouldOpenEarphones) {

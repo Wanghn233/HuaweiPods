@@ -16,6 +16,7 @@ enum class HuaweiDeviceRoute {
     HUAWEI_FREEARC,
     HUAWEI_EYEWEAR,
     HUAWEI_EYEWEAR2,
+    NOTHING_EAR_OPEN,
     UNSUPPORTED,
 }
 
@@ -179,6 +180,13 @@ private val routeCapabilities = linkedMapOf(
         supportsGestureConfiguration = true,
         supportsLowLatencyControl = true,
     ),
+    HuaweiDeviceRoute.NOTHING_EAR_OPEN to HuaweiDeviceCapabilities(
+        displayName = "Nothing Ear (open)",
+        aliases = setOf("nothingearopen"),
+        supportsRfcommBattery = true,
+        supportsLowLatencyControl = true,
+        hasChargingCase = true,
+    ),
 )
 
 private val normalizedAliasRoutes: Map<String, HuaweiDeviceRoute> = buildMap {
@@ -203,6 +211,7 @@ private val broadcastValueByRoute = mapOf(
     HuaweiDeviceRoute.HUAWEI_FREEARC to "HUAWEI_FREEARC",
     HuaweiDeviceRoute.HUAWEI_EYEWEAR to "HUAWEI_EYEWEAR",
     HuaweiDeviceRoute.HUAWEI_EYEWEAR2 to "HUAWEI_EYEWEAR2",
+    HuaweiDeviceRoute.NOTHING_EAR_OPEN to "NOTHING_EAR_OPEN",
 )
 
 private val routeByBroadcastValue = broadcastValueByRoute.entries.associate { (route, value) ->
