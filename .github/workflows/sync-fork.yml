@@ -1,4 +1,4 @@
-name: Sync fork with upstream
+name: Sync fork and build APK
 
 on:
   schedule:
@@ -11,19 +11,63 @@ permissions:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.sync.outputs.changed }}
     steps:
       - name: Checkout main
         uses: actions/checkout@v4
         with:
           ref: main
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Merge upstream
+      - name: Merge upstream main
+        id: sync
         run: |
           git remote add upstream https://github.com/Nshpiter/HuaweiPods.git
           git fetch upstream main
           git config user.name "Wanghn233"
           git config user.email "30120785+Wanghn233@users.noreply.github.com"
-          git merge upstream/main --no-edit
-          git push origin main
+          if git merge-base --is-ancestor upstream/main HEAD; then
+            echo "Upstream unchanged"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git merge upstream/main --no-edit
+            git push origin main
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  build:
+    needs: sync
+    if: needs.sync.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 23
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build debug APK
+        run: |
+          chmod +x gradlew
+          ./gradlew :app:assembleDebug
+
+      - name: Publish rolling release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(grep -oP 'versionName\s*=\s*"\K[^"]+' app/build.gradle.kts || echo unknown)
+          TAG=auto-build
+          gh release create "$TAG" \
+            --title "Auto build (upstream $VERSION + Nothing Ear open)" \
+            --notes "Daily automatic build: upstream main merged with Nothing Ear (open) support. Debug-signed, installable directly." \
+            || true
+          gh release upload "$TAG" app/build/outputs/apk/debug/app-debug.apk --clobber
