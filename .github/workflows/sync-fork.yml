@@ -9,10 +9,8 @@ permissions:
   contents: write
 
 jobs:
-  sync:
+  sync-and-build:
     runs-on: ubuntu-latest
-    outputs:
-      changed: ${{ steps.sync.outputs.changed }}
     steps:
       - name: Checkout main
         uses: actions/checkout@v4
@@ -37,11 +35,13 @@ jobs:
           fi
 
       - name: Build release APK
+        if: steps.sync.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
         run: |
           chmod +x gradlew
           ./gradlew :app:assembleRelease
 
       - name: Sign APK
+        if: steps.sync.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
           ALIAS: ${{ secrets.ALIAS }}
@@ -59,7 +59,7 @@ jobs:
           KEYFILE=$(mktemp /tmp/huaweipods-fork.XXXXXX.jks)
           trap 'rm -f "$KEYFILE"' EXIT
           echo "$SIGNING_KEY" | base64 -d > "$KEYFILE"
-          VERSION=$(grep -oP 'versionName\s*=\s*"\K[^"]+' app/build/build.gradle.kts 2>/dev/null || grep -oP 'versionName\s*=\s*"\K[^"]+' app/build.gradle.kts || echo unknown)
+          VERSION=$(grep -oP 'versionName\s*=\s*"\K[^"]+' app/build.gradle.kts || echo unknown)
           OUT_NAME="HuaweiPods-${VERSION}-fork-release.apk"
           "${BUILD_TOOLS}zipalign" -f 4 "$UNSIGNED_APK" aligned.apk
           "${BUILD_TOOLS}apksigner" sign \
@@ -67,16 +67,19 @@ jobs:
             --ks-key-alias "$ALIAS" \
             --ks-pass "pass:$KEYSTORE_PASSWORD" \
             --key-pass "pass:$KEY_PASSWORD" \
-            --out "HuaweiPods-${VERSION}-fork-release.apk" aligned.apk
+            --out "$OUT_NAME" aligned.apk
           rm -f "$KEYFILE"
-          mkdir -p signed && mv HuaweiPods-*.apk signed/
+          mkdir -p signed && mv "$OUT_NAME" signed/
 
       - name: Publish rolling release
+        if: steps.sync.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create auto-build \
+          set -e
+          REPO=Wanghn233/HuaweiPods
+          gh release delete auto-build --repo "$REPO" --yes --cleanup-tag || true
+          gh release create auto-build --repo "$REPO" --target main \
             --title "Auto build (upstream + Nothing Ear open)" \
-            --notes "Daily automatic build: upstream main merged with Nothing Ear (open) support. Release-signed with fork key. NOTE: signature differs from the official release, uninstall official app before first install." \
-            || true
-          gh release upload auto-build signed/HuaweiPods-*.apk --clobber
+            --notes "Daily automatic build: upstream main merged with Nothing Ear (open) support. Release-signed with the fork key. NOTE: the signature differs from the official release, uninstall the official app before first install."
+          gh release upload auto-build --repo "$REPO" signed/HuaweiPods-*.apk --clobber
