@@ -22,26 +22,26 @@ The unified build supports the 16 models below in one APK. Model-specific test A
 
 ## Supported models
 
-| Model | Status | Integrated capabilities |
-| --- | --- | --- |
-| HUAWEI FreeBuds 3 | Stable | Battery, ANC on/off, nine-position spatial ANC dial, double-tap gestures, and system UI integration |
-| HUAWEI FreeBuds 4E | Extended support | Battery, ANC/off with Light/Balanced levels and readback, left/right double-tap and press-and-hold, wear detection, fixed swipe-volume guidance, three official sound presets, and official color images |
-| HUAWEI FreeBuds 5 | Extended support | Battery, ANC/off readback, Smart/Light/Balanced ANC levels, wear detection, four official sound presets, high-quality audio and low-latency auto-apply; gesture settings remain pending |
-| HUAWEI FreeBuds 5i | Extended support | Battery, transparency/ANC/off readback, Smart/Light/Balanced/Deep ANC levels, left/right double-tap, wear detection, four official sound presets, high-quality audio, low-latency auto-apply, and official color images; long-press and swipe settings remain pending |
-| HUAWEI FreeBuds SE 4 ANC | Extended support | Battery, transparency/ANC/off readback, Light/Balanced/Deep ANC levels, wind-noise reduction, four official sound presets, a 10-band custom EQ, low-latency auto-apply, and official color images; gesture settings remain pending |
-| HUAWEI FreeBuds 6i | Extended support | Battery, transparency/ANC/off readback, four ANC levels, voice transparency, double/triple-tap gestures, four official sound presets, a 10-band custom EQ, low-latency auto-apply, Fusion Device Center synchronization, and dedicated images |
-| HUAWEI FreeBuds Pro 3 | Extended support | Battery, three-mode control and readback, four ANC levels, voice transparency, long-press/pinch/swipe gestures, and low-latency auto-apply |
-| HUAWEI FreeBuds Pro 4 | Basic support | Battery and ANC/off; no verified ANC state readback or gesture settings |
-| HUAWEI FreeBuds Pro 5 | Extended support | Battery, three-mode readback, four ANC levels, standard/voice/adaptive transparency, triple-tap/pinch/swipe-volume gestures, wear detection, adaptive volume, head-motion and voice controls, spatial audio, nine Yuezhang/scene/AI sound presets, a 10-band custom EQ, high-quality audio, low-latency auto-apply, dual-device connection, case-open sound, and ear-tip material |
-| HUAWEI FreeBuds 7i | Extended support | Battery, transparency/ANC/off readback, four ANC levels, double/triple-tap, long-press and swipe-volume gestures, wear detection, head-motion control, spatial audio, four sound presets, a 10-band custom EQ, high-quality audio, low-latency auto-apply, dual-device list management, and official color images |
-| HUAWEI FreeClip | Basic support | Left/right/case battery; no traditional ANC |
-| HUAWEI FreeClip 2 | Extended support | Battery, double/triple-tap and swipe gestures, spatial audio, four official sound presets, saved custom presets, low-latency auto-apply, and selected wearing/audio settings; no traditional ANC |
-| HUAWEI FreeArc | Extended support | Left/right/case battery, double/triple-tap, press-and-hold and swipe gestures, five official sound presets, a 10-band custom EQ, and official color images; no traditional ANC |
-| HUAWEI Eyewear (1st generation) | Basic support | Left/right temple battery and system UI integration; no ANC |
-| HUAWEI Eyewear 2 | Basic support | Left/right temple battery, double-tap/swipe gestures, and low-latency auto-apply; no ANC |
-| HUAWEI Eyewear 3 | Basic support | Protocol-model identification, left/right temple battery, system eyewear classification, and official color images; no ANC |
+| Model | Integrated capabilities |
+| --- | --- |
+| HUAWEI FreeBuds 3 | Battery, ANC on/off, nine-position spatial ANC dial, double-tap gestures, and system UI integration |
+| HUAWEI FreeBuds 4E | Battery, ANC/off with Light/Balanced levels and readback, left/right double-tap and press-and-hold, wear detection, fixed swipe-volume guidance, three official sound presets, and official color images |
+| HUAWEI FreeBuds 5 | Battery, ANC/off readback, Smart/Light/Balanced ANC levels, wear detection, four official sound presets, high-quality audio and low-latency auto-apply; gesture settings remain pending |
+| HUAWEI FreeBuds 5i | Battery, transparency/ANC/off readback, Smart/Light/Balanced/Deep ANC levels, left/right double-tap, wear detection, four official sound presets, high-quality audio, low-latency auto-apply, and official color images; long-press and swipe settings remain pending |
+| HUAWEI FreeBuds SE 4 ANC | Battery, transparency/ANC/off readback, Light/Balanced/Deep ANC levels, wind-noise reduction, four official sound presets, a 10-band custom EQ, low-latency auto-apply, and official color images; gesture settings remain pending |
+| HUAWEI FreeBuds 6i | Battery, transparency/ANC/off readback, four ANC levels, voice transparency, double/triple-tap gestures, four official sound presets, a 10-band custom EQ, saved low-latency preference with reconnect auto-apply, Fusion Device Center synchronization, and dedicated images |
+| HUAWEI FreeBuds Pro 3 | Battery, three-mode control and readback, four ANC levels, voice transparency, long-press/pinch/swipe gestures, and low-latency auto-apply |
+| HUAWEI FreeBuds Pro 4 | Battery and ANC/off; no verified ANC state readback or gesture settings |
+| HUAWEI FreeBuds Pro 5 | Battery, three-mode readback, four ANC levels, standard/voice/adaptive transparency, triple-tap/pinch/swipe-volume gestures, wear detection, adaptive volume, head-motion and voice controls, spatial audio, nine Yuezhang/scene/AI sound presets, a 10-band custom EQ, high-quality audio, low-latency auto-apply, dual-device connection, case-open sound, and ear-tip material |
+| HUAWEI FreeBuds 7i | Battery, transparency/ANC/off readback, four ANC levels, double/triple-tap, long-press and swipe-volume gestures, wear detection, head-motion control, spatial audio, four sound presets, a 10-band custom EQ, high-quality audio, low-latency auto-apply, dual-device list management, and official color images |
+| HUAWEI FreeClip | Left/right/case battery; no traditional ANC |
+| HUAWEI FreeClip 2 | Battery, double/triple-tap and swipe gestures, spatial audio, four official sound presets, saved custom presets, low-latency auto-apply, and selected wearing/audio settings; no traditional ANC |
+| HUAWEI FreeArc | Left/right/case battery, double/triple-tap, press-and-hold and swipe gestures, five official sound presets, a 10-band custom EQ, and official color images; no traditional ANC |
+| HUAWEI Eyewear (1st generation) | Left/right temple battery and system UI integration; no ANC |
+| HUAWEI Eyewear 2 | Left/right temple battery, double-tap/swipe gestures, and low-latency auto-apply; no ANC |
+| HUAWEI Eyewear 3 | Protocol-model identification, left/right temple battery, system eyewear classification, and official color images; no ANC |
 
-“Stable” means the model has received substantial device testing. “Extended support” includes additional protocol controls, while “Basic support” covers identification, battery, or core controls. Models not marked stable still benefit from real-device regression testing, and unlisted official features should not be assumed to work.
+The table lists currently integrated capabilities. Unlisted official features should not be assumed to work, and behavior can vary by earbud firmware, HyperOS version, and system component version.
 
 ## Features
 
@@ -81,7 +81,7 @@ The unified build supports the 16 models below in one APK. Model-specific test A
 
 The release build no longer needs to install, run, or hook HUAWEI AI Life Audio for official images. Modern models provide the model and color identity over Bluetooth; legacy models can browse the verified Huawei color catalog in the image settings and ask the user to confirm once. Failures always fall back to cached or bundled images and never guess the default color.
 
-The Fusion Device Center low-latency card is enabled only on verified legacy hosts and can be disabled in HuaweiPods settings; on HyperOS 4, use the module popup or detail page instead. Because the verified protocol has no reliable readback for this setting, the UI shows the last successful write that will be reapplied after reconnection rather than a live device-reported state.
+The Fusion Device Center low-latency card is enabled only on verified legacy hosts and can be disabled in HuaweiPods settings; on HyperOS 4, use the module popup or detail page instead. Version 1.8.3 fixes a popup issue where a successful FreeBuds 6i low-latency write was not saved and the switch appeared off when reopened. Because the protocol has no reliable readback for this setting, the UI shows the last successful write that will be reapplied after reconnection rather than a live device-reported state. The effect on the earbuds still needs device testing.
 
 For model-specific retesting and protocol capture, join QQ group `1022359908`.
 

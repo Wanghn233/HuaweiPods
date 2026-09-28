@@ -5,7 +5,7 @@ description: 在小米 HyperOS 上安装、启用并检查 HuaweiPods。
 
 # 快速开始
 
-HuaweiPods 是面向小米 HyperOS 的 Xposed 模块。从 1.2.0 起项目使用统一 APK，当前已接入 16 个型号；各型号的实机验证程度和可用控制并不相同，请先查看[支持状态](../support/index.md)。
+HuaweiPods 是面向小米 HyperOS 的 Xposed 模块。从 1.2.0 起项目使用统一 APK，当前已接入 16 个型号；各型号的实机验证程度和可用控制并不相同，请先查看[支持型号](../support/index.md)。
 
 ::: warning 安装前确认
 HuaweiPods 需要正常工作的 LSPosed 环境，并会修改系统蓝牙相关进程的行为。请先确认你了解 Xposed 模块的启用、停用与恢复方式。
@@ -63,7 +63,7 @@ FreeClip、FreeClip 2 和 Eyewear 系列不提供传统主动降噪，看不到�
 3. 在 HuaweiPods 内重启相关作用域；仍无效时再重启手机；
 4. 在系统蓝牙中断开再连接耳机；
 5. 在设备选择页确认当前蓝牙地址绑定的是实际型号；
-6. 对照[支持状态](../support/index.md)，确认该入口确实属于当前机型。
+6. 对照[支持型号](../support/index.md)，确认该入口确实属于当前机型。
 
 仍无法复现时，请加入 QQ 群 `1022359908`，附上耳机型号、手机型号、HyperOS 版本、LSPosed 版本、HuaweiPods 版本和复现步骤；也可以先查看 [GitHub Issues](https://github.com/Nshpiter/HuaweiPods/issues) 中是否已有相同问题。
 

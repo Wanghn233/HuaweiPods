@@ -270,10 +270,22 @@ private fun PopupContent(
                     }
                     HuaweiPodsAction.ACTION_HUAWEI_LOW_LATENCY_CHANGED -> {
                         if (intent.hasExtra(HuaweiPodsAction.EXTRA_HUAWEI_LOW_LATENCY_ENABLED)) {
-                            lowLatencyEnabled.value = intent.getBooleanExtra(
-                                HuaweiPodsAction.EXTRA_HUAWEI_LOW_LATENCY_ENABLED,
-                                lowLatencyEnabled.value,
+                            val confirmed = intent.getBooleanExtra(
+                                HuaweiPodsAction.EXTRA_HUAWEI_LOW_LATENCY_WRITE_SUCCESS,
+                                false,
                             )
+                            lowLatencyEnabled.value = if (confirmed) {
+                                intent.getBooleanExtra(
+                                    HuaweiPodsAction.EXTRA_HUAWEI_LOW_LATENCY_ENABLED,
+                                    lowLatencyEnabled.value,
+                                )
+                            } else {
+                                LowLatencyPrefs.desiredOrNull(prefs, target.address, target.route)
+                                    ?: intent.getBooleanExtra(
+                                        HuaweiPodsAction.EXTRA_HUAWEI_LOW_LATENCY_ENABLED,
+                                        lowLatencyEnabled.value,
+                                    )
+                            }
                         }
                     }
                     HuaweiPodsAction.ACTION_PODS_CONNECTED -> {

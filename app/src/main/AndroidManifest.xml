@@ -61,6 +61,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <receiver
+            android:name=".LowLatencyStateReceiver"
+            android:exported="true"
+            android:permission="android.permission.BLUETOOTH_PRIVILEGED">
+            <intent-filter>
+                <action android:name="chen.action.huaweipods.huawei_low_latency_changed" />
+            </intent-filter>
+        </receiver>
         <provider
             android:name=".config.PodImageProvider"
             android:authorities="${applicationId}.podimages"
