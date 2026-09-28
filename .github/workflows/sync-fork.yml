@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: write
-  workflows: write
 
 jobs:
   sync-and-build:
@@ -30,7 +29,18 @@ jobs:
             echo "Upstream unchanged"
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
+            FORK_TIP=$(git rev-parse HEAD)
             git merge upstream/main --no-edit
+            # fork 的 workflow 文件以 fork 为准：GITHUB_TOKEN 无 workflows 权限，
+            # 且上游 workflow 依赖其自有 secret，不应同步进 fork
+            CHANGED_WF=$(git diff --name-only --diff-filter=MD "$FORK_TIP" HEAD -- .github/workflows/ || true)
+            ADDED_WF=$(git diff --name-only --diff-filter=A "$FORK_TIP" HEAD -- .github/workflows/ || true)
+            if [ -n "$CHANGED_WF" ] || [ -n "$ADDED_WF" ]; then
+              echo "Reverting upstream workflow changes: ${CHANGED_WF}${ADDED_WF}"
+              if [ -n "$CHANGED_WF" ]; then git checkout "$FORK_TIP" -- $CHANGED_WF; fi
+              if [ -n "$ADDED_WF" ]; then git rm -f --quiet -- $ADDED_WF; fi
+              git commit --amend --no-edit
+            fi
             git push origin main
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
