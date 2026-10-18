@@ -333,9 +333,13 @@ object HuaweiL2capAncController {
         packet: ByteArray,
         description: String,
         keepSocket: Boolean = true,
+        shouldWrite: () -> Boolean = { true },
         onComplete: ((Boolean) -> Unit)? = null,
     ) {
-        enqueueWrite(context, device, route, packet, "raw $description", keepSocket, onComplete)
+        enqueueWrite(
+            context, device, route, packet, "raw $description", keepSocket, onComplete,
+            shouldWrite = shouldWrite,
+        )
     }
 
     fun sendRawPacketOnce(
@@ -346,7 +350,7 @@ object HuaweiL2capAncController {
         description: String,
         onComplete: ((Boolean) -> Unit)? = null,
     ) {
-        sendRawPacket(context, device, route, packet, description, keepSocket = false, onComplete)
+        sendRawPacket(context, device, route, packet, description, keepSocket = false, onComplete = onComplete)
     }
 
     private fun enqueueWrite(
@@ -360,6 +364,7 @@ object HuaweiL2capAncController {
         responseWindowMs: Long = 0L,
         responseComplete: ((ByteArray) -> Boolean)? = null,
         onResponse: ((ByteArray) -> Unit)? = null,
+        shouldWrite: () -> Boolean = { true },
     ) {
         val requestGeneration = transportGeneration.snapshot()
         val appContext = context.applicationContext ?: context
@@ -383,7 +388,7 @@ object HuaweiL2capAncController {
                     return@synchronized
                 }
                 executeTracked(executor) worker@{
-                    if (!transportGeneration.isCurrent(requestGeneration)) {
+                    if (!transportGeneration.isCurrent(requestGeneration) || !shouldWrite()) {
                         logInfo(
                             appContext,
                             "Huawei ANC canceled stale queued request $description device=${device.address}",
@@ -395,6 +400,11 @@ object HuaweiL2capAncController {
                         logInfo(appContext, "Huawei ANC worker started $description keepSocket=$keepSocket device=${device.address}")
                         val currentSocket = ensureSocket(device, requestGeneration)
                         ensureCurrentTransportGeneration(requestGeneration)
+                        // 建链可能较慢；发送前再次拒绝被新用户操作取代的命令。
+                        if (!shouldWrite()) {
+                            notifyComplete(onComplete, false)
+                            return@worker
+                        }
                         currentSocket.outputStream.write(packet)
                         currentSocket.outputStream.flush()
                         ensureCurrentTransportGeneration(requestGeneration)
